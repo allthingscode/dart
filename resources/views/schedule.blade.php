@@ -1,0 +1,11 @@
+<tr>
+    <td>
+        {{$schedule->time}}
+    </td>
+    <td>
+        {{$schedule->station->name}}
+    </td>
+    <td>
+        {{$schedule->trainTrip->trainTripProgram->name}}
+    </td>
+</tr>
