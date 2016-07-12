@@ -14,25 +14,26 @@ class ScheduledStopDataSource extends Model
     protected $table = 'scheduled_stop_data_sources';
 
 
+
     /**
-     * Each schedule data source has a train trip reference
-     *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function trainTrip()
-    {
-        return $this->hasOne( 'Entities\TrainTrip', 'id', 'train_trip_id' );
-    }
-
-
     public function scheduleProgram()
     {
         return $this->hasOne( 'Entities\ScheduleProgram', 'id', 'schedule_program_id' );
     }
 
 
+    
 
-
+    /**
+     * TODO Split this up into more granular scopes
+     *
+     * @param $query
+     * @param $trainTripProgramId
+     * @param $scheduleProgramId
+     * @return mixed
+     */
     public function scopeByNaturalKey( $query, $trainTripProgramId, $scheduleProgramId )
     {
         $scopedQuery = $query
