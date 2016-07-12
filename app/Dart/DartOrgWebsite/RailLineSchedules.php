@@ -17,6 +17,8 @@ class RailLineSchedules
 
 
     /**
+     * TODO Pass id values, rather than entities
+     *
      * @param \Entities\ScheduleProgram $scheduleProgram
      * @param \Entities\TrainTripProgram $trainTripProgram
      * @return array
@@ -35,12 +37,15 @@ class RailLineSchedules
 
 
     /**
+     * TODO Pass id values, rather than entities
+     *
      * @param \Entities\ScheduleProgram $scheduleProgram
      * @param \Entities\TrainTripProgram $trainTripProgram
      * @return string
      */
     private function _getScheduleSourceUrl( \Entities\ScheduleProgram $scheduleProgram, \Entities\TrainTripProgram $trainTripProgram )
     {
+        // TODO Use more granular scopes
         $dataSource =
             \Entities\ScheduledStopDataSource::byNaturalKey( $trainTripProgram->id, $scheduleProgram->id )
                 ->value( 'base_url' );

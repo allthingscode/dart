@@ -37,17 +37,17 @@ class Updater
         $trainTripPrograms = \Entities\TrainTripProgram::all();
 
         // For all combinations, update the schedule
-        foreach ( $schedulePrograms as $scheduleProgramRecord ) {
+        foreach ( $schedulePrograms as $scheduleProgram ) {
             foreach ( $trainTripPrograms as $trainTripProgram ) {
 
                 // Skip the Orange South Weekends because it is all F*d up
                 if ( 'Orange Line South' === $trainTripProgram->name ) {
-                    if ( 'Weekend' === $scheduleProgramRecord->name ) {
+                    if ( 'Weekend' === $scheduleProgram->name ) {
                         continue;
                     }
                 }
 
-                $this->updateSchedule( $scheduleProgramRecord, $trainTripProgram );
+                $this->updateSchedule( $scheduleProgram, $trainTripProgram );
             }
         }
     }
@@ -58,6 +58,8 @@ class Updater
 
 
     /**
+     * TODO Pass id values rather than entities
+     *
      * @param \Entities\ScheduleProgram $scheduleProgram
      * @param \Entities\TrainTripProgram $trainTripProgram
      */
