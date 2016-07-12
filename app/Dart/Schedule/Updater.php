@@ -119,6 +119,8 @@ class Updater
             throw new Exception("Invalid Dart time:  {$sanitizedTime}");
         }
 
+        // TODO Can all this be simplified/reduced using strtotime and date?
+
         list( $hour, $minute ) = explode( ':', $sanitizedTime );
         if ( 'P' === substr($sanitizedTime, -1 ) ) {
             if ( $hour <> '12' ) {

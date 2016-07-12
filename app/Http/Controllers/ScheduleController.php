@@ -28,6 +28,8 @@ class ScheduleController extends Controller
         $scheduleProgram  = \Entities\ScheduleProgram::findOrFail(  $scheduleProgramId  );
         $trainTripProgram = \Entities\TrainTripProgram::findOrFail( $trainTripProgramId );
 
+        // TODO Is this appropriate for a controller?
+
         $trainTripIdsForTrainTripProgram =
             \Entities\TrainTrip::
                 byTrainTripProgram( $trainTripProgramId )

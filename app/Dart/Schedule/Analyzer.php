@@ -26,7 +26,7 @@ class Analyzer
      */
     public static function whereIsMyTrain( $stationId, $direction, $asOfTimestamp, $maxTrainStops )
     {
-        // Validate direction input and prevent sql injection attacks
+        // Validate direction input
         switch ( strtolower( trim( $direction ) ) ) {
             case 'north':
             case 'south':
@@ -34,6 +34,8 @@ class Analyzer
             default:
                 throw new \Exception( "Invalid direction value ({$direction}).  Expected 'north' or 'south'." );
         }
+
+        // TODO Convert to a proper full query with joins
 
         // Get an array of all the train trip programs that travel north/south
         $trainTripProgramIds = \Entities\TrainTripProgram::byDirection(  $direction           )->pluck( 'id' )->toArray();
