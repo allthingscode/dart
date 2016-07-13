@@ -9,8 +9,6 @@
 namespace Schedule;
 
 
-use Entities\Train;
-use Entities\TrainTripProgram;
 use Mockery\CountValidator\Exception;
 
 class Updater
@@ -47,34 +45,28 @@ class Updater
                     }
                 }
 
-                $this->updateSchedule( $scheduleProgram, $trainTripProgram );
+                $this->updateSchedule( $scheduleProgram->id, $trainTripProgram->id );
             }
         }
     }
 
 
-
-
-
-
     /**
-     * TODO Pass id values rather than entities
-     *
-     * @param \Entities\ScheduleProgram $scheduleProgram
-     * @param \Entities\TrainTripProgram $trainTripProgram
+     * @param int $scheduleProgramId
+     * @param int $trainTripProgramId
      */
-    public function updateSchedule( \Entities\ScheduleProgram $scheduleProgram, \Entities\TrainTripProgram $trainTripProgram )
+    public function updateSchedule( $scheduleProgramId, $trainTripProgramId )
     {
         // Pull the current data source from the dart website
         $railLineSchedules = new \DartOrgWebsite\RailLineSchedules();
-        $schedule = $railLineSchedules->getSchedule( $scheduleProgram, $trainTripProgram );
+        $schedule = $railLineSchedules->getSchedule( $scheduleProgramId, $trainTripProgramId );
 
         // Merge the station names (extremely unlikely to change)
         foreach ( $schedule as $tripIdentifier => $scheduleRecord ) {
 
             foreach ( $scheduleRecord as $stationName => $time ) {
 
-                $mysqlTime = $this->_createMySqlTimeFromDartTime($time);
+                $mysqlTime = $this->_createMySqlTimeFromDartTime( $time );
 
                 // If the time is null, then the train isn't actually going to stop at that station,
                 //   so there's really no reason to add a scheduled stop record
@@ -88,11 +80,11 @@ class Updater
                     'name' => $stationName
                 ]);
                 $trainTripEntity = \Entities\TrainTrip::firstOrCreate([
-                    'train_trip_program_id' => $trainTripProgram->id,
+                    'train_trip_program_id' => $trainTripProgramId,
                     'trip_identifier'       => $tripIdentifier
                 ]);
                 \Entities\ScheduledStop::firstOrCreate([
-                    'schedule_program_id' => $scheduleProgram->id,
+                    'schedule_program_id' => $scheduleProgramId,
                     'train_trip_id'       => $trainTripEntity->id,
                     'station_id'          => $stationEntity->id,
                     'time'                => $mysqlTime
