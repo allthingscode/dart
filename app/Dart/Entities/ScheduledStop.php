@@ -100,10 +100,6 @@ class ScheduledStop extends Model
 
 
 
-
-
-
-
     public function scopeByTimeRelativeToTimestamp( $query, $timestamp, $relation )
     {
         $timestampInDartTime = \Schedule\Analyzer::convertTimestampToDartTime( $timestamp );

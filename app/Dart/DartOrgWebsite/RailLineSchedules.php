@@ -9,24 +9,22 @@
 namespace DartOrgWebsite;
 
 
-//use Mockery\CountValidator\Exception;
-use Symfony\Component\DomCrawler\Crawler;
-
 class RailLineSchedules
 {
 
 
     /**
-     * TODO Pass id values, rather than entities
-     *
-     * @param \Entities\ScheduleProgram $scheduleProgram
-     * @param \Entities\TrainTripProgram $trainTripProgram
+     * @param int $scheduleProgramId
+     * @param int $trainTripProgramId
      * @return array
      */
-    public function getSchedule( \Entities\ScheduleProgram $scheduleProgram, \Entities\TrainTripProgram $trainTripProgram )
+    public function getSchedule( $scheduleProgramId, $trainTripProgramId )
     {
         // Get the schedule source URL
-        $scheduleSourceUrl = $this->_getScheduleSourceUrl( $scheduleProgram, $trainTripProgram );
+        $scheduleSourceUrl = $this->_getScheduleSourceUrl( $scheduleProgramId, $trainTripProgramId );
+
+        $scheduleProgram  = \Entities\ScheduleProgram::findOrFail(  $scheduleProgramId  );
+        $trainTripProgram = \Entities\TrainTripProgram::findOrFail( $trainTripProgramId );
         echo "{$scheduleProgram->name} / {$trainTripProgram->name} \t {$scheduleSourceUrl}\n";
 
         // Get the schedule in a nice clean multi-dimensional array
@@ -37,20 +35,19 @@ class RailLineSchedules
 
 
     /**
-     * TODO Pass id values, rather than entities
-     *
-     * @param \Entities\ScheduleProgram $scheduleProgram
-     * @param \Entities\TrainTripProgram $trainTripProgram
+     * @param int $scheduleProgramId
+     * @param int $trainTripProgramId
      * @return string
      */
-    private function _getScheduleSourceUrl( \Entities\ScheduleProgram $scheduleProgram, \Entities\TrainTripProgram $trainTripProgram )
+    private function _getScheduleSourceUrl( $scheduleProgramId, $trainTripProgramId )
     {
-        // TODO Use more granular scopes
-        $dataSource =
-            \Entities\ScheduledStopDataSource::byNaturalKey( $trainTripProgram->id, $scheduleProgram->id )
+        $dataSourceUrl =
+            \Entities\ScheduledStopDataSource::
+                  byTrainTripProgram( $trainTripProgramId )
+                ->byScheduleProgram(  $scheduleProgramId  )
                 ->value( 'base_url' );
 
-        return $dataSource;
+        return $dataSourceUrl;
     }
 
 

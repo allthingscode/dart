@@ -24,20 +24,28 @@ class ScheduledStopDataSource extends Model
     }
 
 
-    
 
     /**
-     * TODO Split this up into more granular scopes
-     *
      * @param $query
      * @param $trainTripProgramId
-     * @param $scheduleProgramId
      * @return mixed
      */
-    public function scopeByNaturalKey( $query, $trainTripProgramId, $scheduleProgramId )
+    public function scopeByTrainTripProgram( $query, $trainTripProgramId )
     {
         $scopedQuery = $query
-            ->where( 'train_trip_program_id', $trainTripProgramId )
+            ->where( 'train_trip_program_id', $trainTripProgramId );
+        return $scopedQuery;
+    }
+
+
+    /**
+     * @param $query
+     * @param int $scheduleProgramId
+     * @return mixed
+     */
+    public function scopeByScheduleProgram($query, $scheduleProgramId )
+    {
+        $scopedQuery = $query
             ->where( 'schedule_program_id',   $scheduleProgramId  );
         return $scopedQuery;
     }

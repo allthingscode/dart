@@ -9,7 +9,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Entities\ScheduledStop;
 
 
 class ScheduleController extends Controller
@@ -29,6 +28,7 @@ class ScheduleController extends Controller
         $trainTripProgram = \Entities\TrainTripProgram::findOrFail( $trainTripProgramId );
 
         // TODO Is this appropriate for a controller?
+        // TODO Use a proper query with joins
 
         $trainTripIdsForTrainTripProgram =
             \Entities\TrainTrip::
