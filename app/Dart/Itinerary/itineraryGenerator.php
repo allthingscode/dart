@@ -41,7 +41,7 @@ class itineraryGenerator
             $maxTripOptions
         );
         if ( false === empty( $itineraries ) ) {
-            return $itineraries;        // We're done!  We found single-trip options.
+            return $itineraries;
             // TODO Do not assume that single trip options are the best ones for a user.
         }
         */
@@ -52,10 +52,6 @@ class itineraryGenerator
             $asOfTimestamp,
             $maxTripOptions
         );
-        if ( false === empty( $itineraries ) ) {
-            return $itineraries;        // We're done!  We found single-trip options.
-        }
-
 
         //dd($itineraries);
 
