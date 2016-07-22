@@ -52,11 +52,16 @@ class Itinerary
                 }
             }
         }
+
+        // Sanity checks
+        reset( $scheduledStopsReadyToAdd );
+        $firstStop = \Entities\ScheduledStop::findOrFail( current( $scheduledStopsReadyToAdd ) );
+        if ( $firstStop->station_id != $startingStationId ) {
+            throw new Exception( "Incomplete train trip itinerary.  Missing start station.  {$scheduleProgramId}/{$trainTripId}/{$startingStationId}/{$endingStationId}" );
+        }
         $lastStop = \Entities\ScheduledStop::findOrFail( end( $scheduledStopsReadyToAdd ) );
         if ( $lastStop->station_id != $endingStationId ) {
-            // This means we have an incomplete route, since we didn't get to the destination.
-            // This can happen for train trips that go the wrong direction.
-            return;     // BAIL since we didn't get a workable train trip
+            throw new Exception( "Incomplete train trip itinerary.  Missing end station.  {$scheduleProgramId}/{$trainTripId}/{$startingStationId}/{$endingStationId}" );
         }
         reset( $scheduledStopsReadyToAdd );
 
